@@ -9,8 +9,7 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-const uri =
-  "mongodb+srv://foodZonousDB:HC5AX4vyNOGKvgig@cluster0.uw1hb.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+const uri = process.env.URL;
 
 console.log(uri);
 const client = new MongoClient(uri, {
@@ -23,6 +22,20 @@ async function run() {
     await client.connect();
     const database = client.db("online_food");
     const itemsCollection = database.collection("items");
+
+    // ADDING FOOD
+    app.post("/addItem", (req, res) => {
+      const _id = req.body._id;
+      const foodName = req.body.foodName;
+      const description = req.body.description;
+      const image = req.body.image;
+
+      itemsCollection
+        .insertOne({ _id, foodName, description, image })
+        .then((result) => {
+          res.send(result.insertedCount > 0);
+        });
+    });
 
     //GET items API
     app.get("/items", async (req, res) => {
