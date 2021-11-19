@@ -88,10 +88,6 @@ async function run() {
       const queryOrders = await queryCursor.toArray();
       const orders = await cursor.toArray();
       res.json({ orders, queryOrders });
-
-      // const cursor = orderCollection.find(query);
-      // const orders = await cursor.toArray();
-      // res.json({ orders });
     });
 
     // DELETE ORDER
